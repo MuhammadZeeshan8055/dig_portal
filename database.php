@@ -1,12 +1,13 @@
 <?php
 
+include('config.php');
+
 class Database
 {
-
-  private $db_host = "localhost";
-  private $db_user = "root";
-  private $db_pass = "";
-  private $db_name = "dhothar_dig_portal";
+  private $db_host = DB_HOST;
+  private $db_user = DB_USER;
+  private $db_pass = DB_PASS;
+  private $db_name = DB_NAME;
 
   private $mysqli = "";
   private $result = array();
