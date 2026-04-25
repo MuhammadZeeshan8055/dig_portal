@@ -5,7 +5,7 @@ session_start();
 if ($_SERVER['HTTP_HOST'] == 'localhost') {
     $base_url = "http://localhost/dig_portal/";
 } else {
-    $base_url = "https://dhotharinternational.com/dhothar_dig_portal/";
+    $base_url = "https://dhotharinternational.com/dig_portal/";
 }
 
 $userrole = 'Super Admin';
