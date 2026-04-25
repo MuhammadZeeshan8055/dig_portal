@@ -93,7 +93,7 @@ include('database.php');
                         <h3>Top Route</h3>
                     </div>
                 </div>
-                <div class="col-sm-3 col-xs-6">
+                <div class="col-sm-6 col-xs-6">
                     <div class="tile-stats tile-red">
                         <div class="icon"><i class="entypo-chart-bar"></i></div>
                         <div class="num" data-start="0" data-end="3" data-postfix="" data-duration="1500"

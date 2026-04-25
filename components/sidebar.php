@@ -96,5 +96,12 @@
             </a>
         </li>
 
+        <li class="opened">
+            <a href="working_queries">
+                <i class="entypo-gauge"></i>
+                <span class="title">Daily Queries</span>
+            </a>
+        </li>
+
     </ul>
 </div>
