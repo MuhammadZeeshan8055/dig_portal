@@ -23,7 +23,7 @@
         <?php if ($userrole == 'Super Admin'): ?>
 
             <!-- <li class="">
-                <a href="<?=$base_url?>index">
+                <a href="<?= $base_url ?>index">
                     <button class="btn btn-primary">SOFTWARE</button>
                 </a>
             </li> -->
@@ -89,19 +89,48 @@
         </li> -->
 
         <!-- Dashboard -->
-        <li class="opened">
-            <a href="index">
+        <li class="<?= ($current_url == 'index') ? 'active' : '' ?>">
+            <a href="<?= $base_url ?>index">
                 <i class="entypo-gauge"></i>
                 <span class="title">Dashboard</span>
             </a>
         </li>
 
-        <li class="opened">
+        <li class="<?= ($current_url == 'working_queries') ? 'active' : '' ?>">
             <a href="working_queries">
                 <i class="entypo-gauge"></i>
                 <span class="title">Daily Queries</span>
             </a>
         </li>
+
+        <li class="<?= in_array($current_url, ['fares', 'add_fares']) ? 'active' : '' ?>">
+            <a href="<?= $base_url ?>fares">
+                <i class="entypo-gauge"></i>
+                <span class="title">Fares</span>
+            </a>
+        </li>
+
+        <li class="<?= in_array($current_url, ['discounted_fares', 'add_discounted_fares']) ? 'active' : '' ?>">
+            <a href="<?= $base_url ?>discounted_fares">
+                <i class="entypo-gauge"></i>
+                <span class="title">Discounted Fares</span>
+            </a>
+        </li>
+
+        <li class="<?= in_array($current_url, ['group_bookings', 'add_group_bookings']) ? 'active' : '' ?>">
+            <a href="<?= $base_url ?>group_bookings">
+                <i class="entypo-gauge"></i>
+                <span class="title">Group Bookings</span>
+            </a>
+        </li>
+
+        <li class="<?= in_array($current_url, ['group_queries', 'add_group_queries']) ? 'active' : '' ?>">
+            <a href="<?= $base_url ?>group_queries">
+                <i class="entypo-gauge"></i>
+                <span class="title">Group Queries</span>
+            </a>
+        </li>
+
 
     </ul>
 </div>

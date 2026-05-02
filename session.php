@@ -8,6 +8,8 @@ if ($_SERVER['HTTP_HOST'] == 'localhost') {
     $base_url = "https://dhotharinternational.com/dig_portal/";
 }
 
+$current_url = basename($_SERVER['REQUEST_URI']);
+
 $userrole = 'Super Admin';
 
 function pr($data)

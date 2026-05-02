@@ -88,8 +88,7 @@ include('database.php');
                 <div class="col-sm-6 col-xs-6">
                     <div class="tile-stats tile-aqua">
                         <div class="icon"><i class="entypo-mail"></i></div>
-                        <div class="num" data-postfix="" data-duration="1500"
-                            data-delay="1200">Dubai To London</div>
+                        <div class="num" data-postfix="" data-duration="1500" data-delay="1200">Dubai To London</div>
                         <h3>Top Route</h3>
                     </div>
                 </div>
@@ -326,12 +325,33 @@ include('database.php');
             <footer class="main">
                 &copy; <strong>Dhothar International</strong>
             </footer>
-            
+
         </div>
 
 
 
     </div>
+
+    
+    <script src="<?= $base_url ?>assets/js/datatables/datatables.js" id="script-resource-8"></script>
+    <link rel="stylesheet" href="<?= $base_url ?>assets/js/datatables/datatables.css" id="style-resource-1">
+    <link rel="stylesheet" href="<?= $base_url ?>assets/js/jvectormap/jquery-jvectormap-1.2.2.css"
+        id="style-resource-1">
+    <link rel="stylesheet" href="<?= $base_url ?>assets/js/rickshaw/rickshaw.min.css" id="style-resource-2">
+    <script src="<?= $base_url ?>assets/js/gsap/TweenMax.min.js" id="script-resource-1"></script>
+    <script src="<?= $base_url ?>assets/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js"
+        id="script-resource-2"></script>
+    <script src="<?= $base_url ?>assets/js/bootstrap.js" id="script-resource-3"></script>
+    <script src="<?= $base_url ?>assets/js/joinable.js" id="script-resource-4"></script>
+    <script src="<?= $base_url ?>assets/js/resizeable.js" id="script-resource-5"></script>
+    <script src="<?= $base_url ?>assets/js/neon-api.js" id="script-resource-6"></script>
+    <script src="<?= $base_url ?>assets/js/cookies.min.js" id="script-resource-7"></script>
+    <script src="<?= $base_url ?>assets/js/jvectormap/jquery-jvectormap-1.2.2.min.js" id="script-resource-8"></script>
+    <script src="<?= $base_url ?>assets/js/jvectormap/jquery-jvectormap-europe-merc-en.js"
+        id="script-resource-9"></script>
+
+    <script src="<?= $base_url ?>assets/js/neon-chat.js" id="script-resource-16"></script>
+    <script src="<?= $base_url ?>assets/js/neon-custom.js" id="script-resource-17"></script>
 
 
 
