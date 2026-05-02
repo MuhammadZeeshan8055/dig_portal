@@ -96,41 +96,45 @@
             </a>
         </li>
 
+        <!-- Daily Queries -->
         <li class="<?= ($current_url == 'working_queries') ? 'active' : '' ?>">
             <a href="working_queries">
-                <i class="entypo-gauge"></i>
+                <i class="entypo-chat"></i>
                 <span class="title">Daily Queries</span>
             </a>
         </li>
 
+        <!-- Fares -->
         <li class="<?= in_array($current_url, ['fares', 'add_fares']) ? 'active' : '' ?>">
             <a href="<?= $base_url ?>fares">
-                <i class="entypo-gauge"></i>
+                <i class="entypo-ticket"></i>
                 <span class="title">Fares</span>
             </a>
         </li>
 
+        <!-- Discounted Fares -->
         <li class="<?= in_array($current_url, ['discounted_fares', 'add_discounted_fares']) ? 'active' : '' ?>">
             <a href="<?= $base_url ?>discounted_fares">
-                <i class="entypo-gauge"></i>
+                <i class="entypo-tag"></i>
                 <span class="title">Discounted Fares</span>
             </a>
         </li>
 
+        <!-- Group Bookings -->
         <li class="<?= in_array($current_url, ['group_bookings', 'add_group_bookings']) ? 'active' : '' ?>">
             <a href="<?= $base_url ?>group_bookings">
-                <i class="entypo-gauge"></i>
+                <i class="entypo-users"></i>
                 <span class="title">Group Bookings</span>
             </a>
         </li>
 
+        <!-- Group Queries -->
         <li class="<?= in_array($current_url, ['group_queries', 'add_group_queries']) ? 'active' : '' ?>">
             <a href="<?= $base_url ?>group_queries">
-                <i class="entypo-gauge"></i>
+                <i class="entypo-chat"></i>
                 <span class="title">Group Queries</span>
             </a>
         </li>
-
 
     </ul>
 </div>
