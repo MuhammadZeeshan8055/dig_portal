@@ -4,6 +4,52 @@
  *
 */
 
-body {
-	
+.badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .4px;
+}
+
+.badge-high {
+    background: #e74c3c !important;
+    color: #fff !important;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px !important;
+}
+
+.badge-medium {
+    background: #fad839 !important;
+    color: #fff !important;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px !important;
+}
+
+.badge-low {
+    background: #27ae60 !important;
+    color: #fff !important;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px !important;
+}
+
+.label {
+    border-radius: 12px;
+    font-size: 12px;
+
+}
+
+.f-white {
+    color: #fff !important;
+}
+
+.btn {
+    border-radius: 15px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px !important;
+}
+
+tr.completed td {
+    text-decoration: line-through;
+}
+
+tr.completed td:last-child {
+    text-decoration: none;
 }

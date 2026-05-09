@@ -1,9 +1,10 @@
 <?php
 
 include('session.php');
-include('database.php');
 
-
+$join = "INNER JOIN group_bookings on group_bookings.id = group_queries.group_booking_id";
+$obj->select('group_queries', "group_queries.*,group_bookings.group_name", $join);
+$group_queries = $obj->getResult();
 
 ?>
 <!DOCTYPE html>
@@ -19,12 +20,13 @@ include('database.php');
     <meta name="description" content="Dhothar International" />
     <meta name="author" content="Laborator.co" />
     <link rel="icon" href="<?= $base_url ?>assets/images/favicon.ico">
-    <title>Dhothar International Employee DB | Dashboard</title>
+    <title>Dhothar International DIG | Dashboard</title>
 
     <link rel="stylesheet" href="<?= $base_url ?>assets/css/font-icons/entypo/css/entypo.css" id="style-resource-2">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic"
         id="style-resource-3">
     <link rel="stylesheet" href="<?= $base_url ?>assets/css/bootstrap.css" id="style-resource-4">
+    <link rel="stylesheet" href="<?= $base_url ?>assets/css/custom.css">
     <link rel="stylesheet" href="<?= $base_url ?>assets/css/neon-core.css" id="style-resource-5">
 
     <script src="<?= $base_url ?>assets/js/jquery-1.11.3.min.js"></script>
@@ -101,105 +103,178 @@ include('database.php');
                     <?php
                     $sno = 1;
 
-                    $group_queries = [
-                        [
-                            'id' => 1,
-                            'group' => 'Al Noor Umrah Group',
-                            'customer' => 'Muhammad Ali',
-                            'query_type' => 'Visa',
-                            'query_message' => 'Visa processing time kitna lagay ga aur documents kya required hain?',
-                            'contact' => '03001234567',
-                            'followup_date' => '2026-05-05',
-                            'assigned_to' => 'Farhan',
-                            'status' => 'open'
-                        ],
-                        [
-                            'id' => 2,
-                            'group' => 'ABC Corporate Trip',
-                            'customer' => 'Sara Khan',
-                            'query_type' => 'Hotel',
-                            'query_message' => 'Hotel 4 star confirmed hai ya availability check karni hogi?',
-                            'contact' => '03111222333',
-                            'followup_date' => '2026-05-07',
-                            'assigned_to' => 'Zeeshan',
-                            'status' => 'in_progress'
-                        ],
-                        [
-                            'id' => 3,
-                            'group' => 'Family Tour Group',
-                            'customer' => 'Usman Tariq',
-                            'query_type' => 'Fare',
-                            'query_message' => 'Group discount apply ho sakta hai 12 passengers par?',
-                            'contact' => '03214567890',
-                            'followup_date' => '2026-05-03',
-                            'assigned_to' => 'Ch Zulfiqar',
-                            'status' => 'resolved'
-                        ],
-                    ];
-
+                    // $group_queries = [
+                    //     [
+                    //         'id' => 1,
+                    //         'group_booking_id' => 'Al Noor Umrah Group',
+                    //         'customer_name' => 'Muhammad Ali',
+                    //         'query_type' => 'Visa',
+                    //         'query_details' => 'Visa processing time kitna lagay ga aur documents kya required hain?',
+                    //         'contact_number' => '03001234567',
+                    //         'followup_date' => '2026-05-05',
+                    //         'assigned_to' => 'Farhan',
+                    //         'query_status' => 'open'
+                    //     ],
+                    //     [
+                    //         'id' => 2,
+                    //         'group_booking_id' => 'ABC Corporate Trip',
+                    //         'customer_name' => 'Sara Khan',
+                    //         'query_type' => 'Hotel',
+                    //         'query_details' => 'Hotel 4 star confirmed hai ya availability check karni hogi?',
+                    //         'contact_number' => '03111222333',
+                    //         'followup_date' => '2026-05-07',
+                    //         'assigned_to' => 'Zeeshan',
+                    //         'query_status' => 'in_progress'
+                    //     ],
+                    //     [
+                    //         'id' => 3,
+                    //         'group_booking_id' => 'Family Tour Group',
+                    //         'customer_name' => 'Usman Tariq',
+                    //         'query_type' => 'Fare',
+                    //         'query_details' => 'Group discount apply ho sakta hai 12 passengers par?',
+                    //         'contact_number' => '03214567890',
+                    //         'followup_date' => '2026-05-03',
+                    //         'assigned_to' => 'Ch Zulfiqar',
+                    //         'query_status' => 'resolved'
+                    //     ],
+                    // ];
+                    
                     foreach ($group_queries as $gq) {
                         ?>
                         <tr>
                             <td><?= $sno++; ?></td>
 
-                            <td><?= $gq['group']; ?></td>
+                            <td><?= htmlspecialchars($gq['group_name']); ?></td>
 
-                            <td><?= $gq['customer']; ?></td>
+                            <td><?= htmlspecialchars($gq['customer_name']); ?></td>
 
-                            <td><?= $gq['query_type']; ?></td>
+                            <td><?= ucfirst($gq['query_type']); ?></td>
 
-                            <td style="max-width:250px;">
-                                <a href="javascript:void(0)" class="view-query-message"
-                                    data-message="<?= htmlspecialchars($gq['query_message']); ?>">
-                                    <?= substr($gq['query_message'], 0, 80); ?>...
-                                </a>
+                            <!-- QUERY DETAILS (VIEW MODAL SUPPORT) -->
+                            <td>
+                                <button class="btn btn-link view-group-query"
+                                    data-group_name="<?= htmlspecialchars($gq['group_name']); ?>"
+                                    data-customer_name="<?= htmlspecialchars($gq['customer_name']); ?>"
+                                    data-query_type="<?= $gq['query_type']; ?>"
+                                    data-query_details="<?= htmlspecialchars($gq['query_details']); ?>"
+                                    data-contact_number="<?= $gq['contact_number']; ?>"
+                                    data-followup_date="<?= date('d M Y', strtotime($gq['followup_date'])); ?>"
+                                    data-assigned_to="<?= htmlspecialchars($gq['assigned_to']); ?>"
+                                    data-notes="<?= htmlspecialchars($gq['notes']); ?>"
+                                    data-query_status="<?= $gq['query_status']; ?>" data-toggle="modal"
+                                    data-target="#viewGroupQueryModal">
+
+                                    <?= substr(strip_tags($gq['query_details']), 0, 80); ?>...
+                                </button>
                             </td>
 
-                            <td><?= $gq['contact']; ?></td>
+                            <td><?= $gq['contact_number']; ?></td>
 
                             <td><?= date('d M Y', strtotime($gq['followup_date'])); ?></td>
-                            <td><?= $gq['assigned_to']; ?></td>
+
+                            <td><?= htmlspecialchars($gq['assigned_to']); ?></td>
 
                             <td>
                                 <span class="label 
-                    <?= $gq['status'] == 'open' ? 'label-primary' :
-                        ($gq['status'] == 'in_progress' ? 'label-warning' : 'label-success') ?>">
-                                    <?= $gq['status']; ?>
+                                    <?= $gq['query_status'] == 'open' ? 'label-primary' :
+                                        ($gq['query_status'] == 'in_progress' ? 'label-warning' : 'label-success') ?>">
+                                    <?= ucfirst($gq['query_status']); ?>
                                 </span>
                             </td>
 
                             <td>
                                 <div style="display:flex;gap:10px">
-                                    <button class="btn btn-info btn-sm">Edit</button>
-                                    <button class="btn btn-danger btn-sm">Delete</button>
-                                    <button class="btn btn-success btn-sm">Reply</button>
+
+                                    <a href="add_group_queries.php?id=<?= $gq['id'] ?>" class="btn btn-info btn-sm">
+                                        Edit
+                                    </a>
+
+                                    <button data-id="<?= $gq['id'] ?>" class="btn btn-danger btn-sm delete-group-query">
+                                        Delete
+                                    </button>
+
                                 </div>
                             </td>
                         </tr>
                     <?php } ?>
                 </tbody>
             </table>
-
-            <div id="queryMessageModal" class="modal fade" tabindex="-1" role="dialog">
-                <div class="modal-dialog modal-md" role="document">
+            <div class="modal fade" id="viewGroupQueryModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
                     <div class="modal-content">
 
                         <div class="modal-header">
-                            <h4 class="modal-title">Query Message</h4>
+                            <h4 class="modal-title">Group Query Details</h4>
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
 
                         <div class="modal-body">
-                            <p id="fullQueryMessage" style="white-space: pre-wrap;"></p>
-                        </div>
 
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <label>Group Name</label>
+                                    <input type="text" class="form-control" id="v_group_name" readonly>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label>Customer Name</label>
+                                    <input type="text" class="form-control" id="v_customer_name" readonly>
+                                </div>
+
+                                <div class="clear"></div><br>
+
+                                <div class="col-md-6">
+                                    <label>Query Type</label>
+                                    <input type="text" class="form-control" id="v_query_type" readonly>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label>Contact Number</label>
+                                    <input type="text" class="form-control" id="v_contact_number" readonly>
+                                </div>
+
+                                <div class="clear"></div><br>
+
+                                <div class="col-md-12">
+                                    <label>Query Details</label>
+                                    <textarea class="form-control" id="v_query_details" rows="4" readonly></textarea>
+                                </div>
+
+                                <div class="clear"></div><br>
+
+                                <div class="col-md-6">
+                                    <label>Assigned To</label>
+                                    <input type="text" class="form-control" id="v_assigned_to" readonly>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label>Follow-up Date</label>
+                                    <input type="text" class="form-control" id="v_followup_date" readonly>
+                                </div>
+
+                                <div class="clear"></div><br>
+
+                                <div class="col-md-12">
+                                    <label>Notes</label>
+                                    <textarea class="form-control" id="v_notes" rows="3" readonly></textarea>
+                                </div>
+
+                                <div class="clear"></div><br>
+
+                                <div class="col-md-12">
+                                    <label>Status</label>
+                                    <input type="text" class="form-control" id="v_query_status" readonly>
+                                </div>
+
+                            </div>
+
                         </div>
 
                     </div>
                 </div>
             </div>
+
 
             <br />
 
@@ -235,6 +310,19 @@ include('database.php');
 
     <script src="<?= $base_url ?>assets/js/neon-chat.js" id="script-resource-16"></script>
     <script src="<?= $base_url ?>assets/js/neon-custom.js" id="script-resource-17"></script>
+    <?php if (isset($_SESSION['toast'])) { ?>
+        <script>
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "timeOut": "3000"
+            };
+
+            toastr["<?= $_SESSION['toast']['type'] ?>"]("<?= $_SESSION['toast']['message'] ?>");
+        </script>
+        <?php unset($_SESSION['toast']);
+    } ?>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
 
@@ -248,6 +336,61 @@ include('database.php');
                     $('#queryMessageModal').modal('show'); // Bootstrap modal
                 });
             });
+
+        });
+    </script>
+    <script>
+        $(document).on('click', '.delete-group-query', function () {
+
+            let id = $(this).data('id');
+            let row = $(this).closest('tr');
+
+            if (confirm("Are you sure you want to delete this fare?")) {
+
+                $.ajax({
+                    url: 'ajax/delete',
+                    type: 'POST',
+                    data: {
+                        id: id,
+                        table: 'group_queries'
+                    },
+                    success: function (response) {
+
+                        if (response.trim() == 'success') {
+
+                            row.fadeOut(400, function () {
+                                $(this).remove();
+                            });
+
+                            toastr.success("Group Query deleted successfully!");
+
+                        } else {
+                            toastr.error("Delete failed!");
+                        }
+                    }
+                });
+
+            }
+
+        });
+    </script>
+
+
+    <script>
+        $(document).on('click', '.view-group-query', function () {
+
+            $('#v_group_name').val($(this).data('group_name'));
+            $('#v_customer_name').val($(this).data('customer_name'));
+            $('#v_query_type').val($(this).data('query_type'));
+
+            $('#v_query_details').val($(this).data('query_details'));
+            $('#v_contact_number').val($(this).data('contact_number'));
+
+            $('#v_assigned_to').val($(this).data('assigned_to'));
+            $('#v_followup_date').val($(this).data('followup_date'));
+
+            $('#v_notes').val($(this).data('notes'));
+            $('#v_query_status').val($(this).data('query_status'));
 
         });
     </script>

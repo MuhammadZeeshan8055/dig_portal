@@ -1,12 +1,15 @@
 <?php
 
 session_start();
+include('database.php');
 
 if ($_SERVER['HTTP_HOST'] == 'localhost') {
     $base_url = "http://localhost/dig_portal/";
 } else {
     $base_url = "https://dhotharinternational.com/dig_portal/";
 }
+
+$obj = new Database();
 
 $current_url = basename($_SERVER['REQUEST_URI']);
 

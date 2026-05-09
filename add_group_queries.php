@@ -1,8 +1,62 @@
 <?php
-
 include('session.php');
-include('database.php');
 
+$isEdit = false;
+$groupData = [];
+
+// =========================
+// EDIT FETCH
+// =========================
+if (!empty($_GET['id'])) {
+
+    $id = (int) $_GET['id'];
+
+    $obj->select("group_queries", "*", null, "id = '$id'");
+    $result = $obj->getResult();
+
+    if (!empty($result)) {
+        $groupData = $result[0];
+        $isEdit = true;
+    }
+}
+
+// =========================
+// INSERT / UPDATE
+// =========================
+if (isset($_POST['save_group_query'])) {
+
+    $data = [
+        'group_booking_id' => $_POST['group_booking_id'],
+        'query_type' => $_POST['query_type'],
+        'customer_name' => $_POST['customer_name'],
+        'contact_number' => $_POST['contact_number'],
+        'query_details' => $_POST['query_details'],
+        'assigned_to' => $_POST['assigned_to'],
+        'followup_date' => $_POST['followup_date'],
+        'notes' => $_POST['notes'],
+        'query_status' => $_POST['query_status'],
+    ];
+
+    // UPDATE
+    if (!empty($_POST['group_query_id'])) {
+
+        $id = (int) $_POST['group_query_id'];
+
+        $obj->update("group_queries", $data, "id = $id");
+
+        $_SESSION['toast'] = ['type' => 'success', 'message' => 'Updated successfully'];
+    }
+    // INSERT
+    else {
+
+        $obj->insert("group_queries", $data);
+
+        $_SESSION['toast'] = ['type' => 'success', 'message' => 'Added successfully'];
+    }
+
+    header("Location: group_queries.php");
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,7 +71,7 @@ include('database.php');
     <meta name="description" content="Dhothar International" />
     <meta name="author" content="Laborator.co" />
     <link rel="icon" href="<?= $base_url ?>assets/images/favicon.ico">
-    <title>Dhothar International Employee DB | Dashboard</title>
+    <title>Dhothar International DIG | Dashboard</title>
 
     <link rel="stylesheet" href="<?= $base_url ?>assets/css/font-icons/entypo/css/entypo.css" id="style-resource-2">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic"
@@ -61,90 +115,118 @@ include('database.php');
                         </div>
                         <div class="panel-body">
                             <div class="row">
-                                <form action="add_group_query" method="post">
-
+                                <form action="" method="post">
+                                    <input type="hidden" name="group_query_id" value="<?= $groupData['id'] ?? ''; ?>">
                                     <div class="row">
 
                                         <div class="col-md-1"></div>
 
                                         <div class="col-md-10">
 
+                                            <!-- GROUP BOOKING -->
                                             <div class="col-md-6">
-                                                <label class="control-label">Select Group Booking</label>
-                                                <select name="group_booking_id" class="form-control" required>
-                                                    <option value="">-- Select Group Booking --</option>
-                                                    <option value="1">Umrah Group - Karachi 45 Pax</option>
-                                                    <option value="2">Corporate Group - Islamabad 20 Pax</option>
-                                                    <option value="3">Family Group - Lahore 12 Pax</option>
+                                                <label>Select Group Booking</label>
+                                                <select name="group_booking_id" class="form-control">
+
+                                                    <option value="">-- Select --</option>
+
+                                                    <?php
+                                                    $obj->select('group_bookings', 'id, group_name, departure_city');
+                                                    $groups = $obj->getResult();
+
+                                                    $selected_group = $groupData['group_booking_id'] ?? '';
+                                                    ?>
+
+                                                    <?php foreach ($groups as $g): ?>
+                                                        <option value="<?= $g['id']; ?>" <?= ($selected_group == $g['id']) ? 'selected' : '' ?>>
+                                                            <?= $g['group_name']; ?> - <?= $g['departure_city']; ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+
                                                 </select>
                                             </div>
 
+                                            <!-- QUERY TYPE -->
                                             <div class="col-md-6">
-                                                <label class="control-label">Query Type</label>
+                                                <label>Query Type</label>
+                                                <?php $qt = $groupData['query_type'] ?? ''; ?>
                                                 <select name="query_type" class="form-control">
-                                                    <option value="">-- Select Query Type --</option>
-                                                    <option value="visa">Visa</option>
-                                                    <option value="hotel">Hotel</option>
-                                                    <option value="fare">Fare</option>
-                                                    <option value="transport">Transport</option>
-                                                    <option value="ticketing">Ticketing</option>
-                                                    <option value="other">Other</option>
+                                                    <option value="">-- Select --</option>
+
+                                                    <?php foreach (['visa', 'hotel', 'fare', 'transport', 'ticketing', 'other'] as $t): ?>
+                                                        <option value="<?= $t ?>" <?= ($qt == $t) ? 'selected' : '' ?>>
+                                                            <?= ucfirst($t) ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+
                                                 </select>
                                             </div>
 
                                             <div class="clear"></div><br>
 
+                                            <!-- CUSTOMER -->
                                             <div class="col-md-6">
-                                                <label class="control-label">Customer Name</label>
+                                                <label>Customer Name</label>
                                                 <input type="text" name="customer_name" class="form-control"
-                                                    placeholder="Enter customer name" required>
+                                                    value="<?= $groupData['customer_name'] ?? '' ?>">
                                             </div>
 
                                             <div class="col-md-6">
-                                                <label class="control-label">Contact Number</label>
+                                                <label>Contact Number</label>
                                                 <input type="text" name="contact_number" class="form-control"
-                                                    placeholder="Enter contact number">
+                                                    value="<?= $groupData['contact_number'] ?? '' ?>">
                                             </div>
 
                                             <div class="clear"></div><br>
 
+                                            <!-- DETAILS -->
                                             <div class="col-md-12">
-                                                <label class="control-label">Query Details</label>
-                                                <textarea name="query_details" class="form-control" rows="4"
-                                                    placeholder="Enter full query details"></textarea>
+                                                <label>Query Details</label>
+                                                <textarea name="query_details"
+                                                    class="form-control"><?= $groupData['query_details'] ?? '' ?></textarea>
                                             </div>
 
                                             <div class="clear"></div><br>
 
+                                            <!-- ASSIGN -->
                                             <div class="col-md-6">
-                                                <label class="control-label">Assign To</label>
+                                                <label>Assign To</label>
                                                 <input type="text" name="assigned_to" class="form-control"
-                                                    placeholder="Assign to staff member">
+                                                    value="<?= $groupData['assigned_to'] ?? '' ?>">
                                             </div>
 
                                             <div class="col-md-6">
-                                                <label class="control-label">Follow-up Date</label>
-                                                <input type="date" name="followup_date" class="form-control">
+                                                <label>Follow-up Date</label>
+                                                <input type="date" name="followup_date" class="form-control"
+                                                    value="<?= $groupData['followup_date'] ?? '' ?>">
                                             </div>
 
                                             <div class="clear"></div><br>
 
+                                            <!-- NOTES -->
                                             <div class="col-md-12">
-                                                <label class="control-label">Notes</label>
-                                                <textarea name="notes" class="form-control" rows="3"
-                                                    placeholder="Internal notes (optional)"></textarea>
+                                                <label>Notes</label>
+                                                <textarea name="notes"
+                                                    class="form-control"><?= $groupData['notes'] ?? '' ?></textarea>
                                             </div>
 
                                             <div class="clear"></div><br>
 
+                                            <!-- STATUS -->
                                             <div class="col-md-6">
-                                                <label class="control-label">Query Status</label>
+                                                <label>Status</label>
+
+                                                <?php $st = $groupData['query_status'] ?? ''; ?>
+
                                                 <select name="query_status" class="form-control">
-                                                    <option value="">-- Select Status --</option>
-                                                    <option value="open">Open</option>
-                                                    <option value="in_progress">In Progress</option>
-                                                    <option value="resolved">Resolved</option>
-                                                    <option value="closed">Closed</option>
+                                                    <option value="">-- Select --</option>
+
+                                                    <?php foreach (['open', 'in_progress', 'resolved', 'closed'] as $s): ?>
+                                                        <option value="<?= $s ?>" <?= ($st == $s) ? 'selected' : '' ?>>
+                                                            <?= ucfirst(str_replace('_', ' ', $s)) ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+
                                                 </select>
                                             </div>
 
@@ -152,9 +234,11 @@ include('database.php');
 
                                         <div class="clear"></div><br>
 
-                                        <div class="col-md-12 text-center">
-                                            <button type="submit" name="add_group_query" class="btn btn-success">
-                                                Submit Group Query
+
+                                        <!-- BUTTON -->
+                                        <div class="col-md-12 text-center" style="margin-top:20px;">
+                                            <button type="submit" name="save_group_query" class="btn btn-success">
+                                                <?= $isEdit ? 'Update Query' : 'Add Query' ?>
                                             </button>
                                         </div>
 

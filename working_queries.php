@@ -1,9 +1,6 @@
 <?php
 
 include('session.php');
-include('database.php');
-
-$obj = new Database();
 
 $obj->select("task_management", "*");
 $tasks = $obj->getResult();
@@ -87,55 +84,16 @@ if (isset($_POST['add_task'])) {
     <meta name="description" content="Dhothar International" />
     <meta name="author" content="Laborator.co" />
     <link rel="icon" href="<?= $base_url ?>assets/images/favicon.ico">
-    <title>Dhothar International Employee DB | Dashboard</title>
+    <title>Dhothar International DIG | Dashboard</title>
 
     <link rel="stylesheet" href="<?= $base_url ?>assets/css/font-icons/entypo/css/entypo.css" id="style-resource-2">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic"
         id="style-resource-3">
     <link rel="stylesheet" href="<?= $base_url ?>assets/css/bootstrap.css" id="style-resource-4">
+    <link rel="stylesheet" href="<?= $base_url ?>assets/css/custom.css">
     <link rel="stylesheet" href="<?= $base_url ?>assets/css/neon-core.css" id="style-resource-5">
 
     <script src="<?= $base_url ?>assets/js/jquery-1.11.3.min.js"></script>
-
-    <style>
-        .badge {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: .4px;
-        }
-
-        .badge-high {
-            background: #e74c3c;
-            color: #fff;
-        }
-
-        .badge-medium {
-            background: #fad839;
-            color: #fff;
-        }
-
-        .badge-low {
-            background: #27ae60;
-            color: #fff;
-        }
-
-        .label {
-            border-radius: 12px;
-            font-size: 12px;
-
-        }
-
-        .btn {
-            border-radius: 15px;
-        }
-
-        .completed {
-            text-decoration: line-through;
-        }
-    </style>
 
 </head>
 
@@ -243,12 +201,13 @@ if (isset($_POST['add_task'])) {
                                     </button>
 
                                     <?php
-                                    echo ($task['status'] == 'completed')
-                                        ? ''
-                                        : '<a href="#" class="btn btn-warning btn-sm complete-task" data-id="' . $task['id'] . '">
-                                        Mark As Completed
-                                    </a>';
+                                    $buttonText = ($task['status'] == 'completed') ? 'Mark As Incomplete' : 'Mark As Completed';
+                                    $buttonClass = ($task['status'] == 'completed') ? 'btn btn-warning btn-sm toggle-task' : 'btn btn-success btn-sm toggle-task';
                                     ?>
+
+                                    <a href="#" class="<?= $buttonClass ?>" data-id="<?= $task['id']; ?>">
+                                        <?= $buttonText; ?>
+                                    </a>
                                 </div>
                             </td>
                         </tr>
@@ -344,10 +303,8 @@ if (isset($_POST['add_task'])) {
     <script src="<?= $base_url ?>assets/js/jvectormap/jquery-jvectormap-1.2.2.min.js" id="script-resource-8"></script>
     <script src="<?= $base_url ?>assets/js/jvectormap/jquery-jvectormap-europe-merc-en.js"
         id="script-resource-9"></script>
-
     <script src="<?= $base_url ?>assets/js/neon-chat.js" id="script-resource-16"></script>
     <script src="<?= $base_url ?>assets/js/neon-custom.js" id="script-resource-17"></script>
-
     <?php if (isset($_SESSION['toast'])) { ?>
         <script>
             toastr.options = {
@@ -392,9 +349,12 @@ if (isset($_POST['add_task'])) {
                 if (confirm("Are you sure you want to delete this task?")) {
 
                     $.ajax({
-                        url: 'ajax/delete_task',
+                        url: 'ajax/delete',
                         type: 'POST',
-                        data: { id: id },
+                        data: {
+                            id: id,
+                            table: 'task_management'
+                        },
                         success: function (response) {
 
                             if (response.trim() == 'success') {
@@ -415,37 +375,35 @@ if (isset($_POST['add_task'])) {
 
             });
 
-            $(document).on('click', '.complete-task', function () {
+            $(document).on('click', '.toggle-task', function (e) {
+                e.preventDefault();
 
                 let id = $(this).data('id');
                 let row = $(this).closest('tr');
+                let button = $(this);
 
                 $.ajax({
-                    url: 'ajax/complete_task',
+                    url: 'ajax/toggle_task_status',
                     type: 'POST',
                     data: { id: id },
                     success: function (response) {
+                        response = response.trim();
 
-                        if (response.trim() == 'success') {
-
-                            row.find('.label')
-                                .removeClass('label-primary')
-                                .addClass('label-success')
-                                .text('completed');
-
-                            // ✅ add completed class to row
+                        if (response === 'completed') {
                             row.addClass('completed');
-
+                            row.find('.label').removeClass('label-primary').addClass('label-success f-white').text('completed');
+                            button.removeClass('btn-success').addClass('btn-warning').text('Mark As Incomplete');
                             toastr.success("Task marked as completed!");
-
+                        } else if (response === 'incomplete') {
+                            row.removeClass('completed');
+                            row.find('.label').removeClass('label-success').addClass('label-primary f-white').text('incomplete');
+                            button.removeClass('btn-warning').addClass('btn-success').text('Mark As Completed');
+                            toastr.success("Task marked as incomplete!");
                         } else {
                             toastr.error("Update failed!");
                         }
                     }
                 });
-
-
-
             });
 
         });
