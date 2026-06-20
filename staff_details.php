@@ -2,15 +2,10 @@
 
 include('session.php');
 
-$join = "INNER JOIN fares ON fares.id = discounted_fares.fare_id";
+$join = "INNER JOIN staff_profile on staff_profile.staff_id = staff_login.id";
+$obj->select('staff_login', "staff_login.*,staff_profile.designation,staff_profile.cnic_passport,staff_profile.phone_1",$join);
+$staff_details = $obj->getResult();
 
-$obj->select(
-    'discounted_fares',
-    'discounted_fares.*, fares.route',
-    $join
-);
-
-$discounted_fares = $obj->getResult();
 
 ?>
 <!DOCTYPE html>
@@ -56,21 +51,20 @@ $discounted_fares = $obj->getResult();
             <hr />
 
             <ol class="breadcrumb bc-3">
-                <li> <a href=#><i class="fa-home"></i>Dashboard</a>
+                <li> <a href=#><i
+                            class="fa-home"></i>Dashboard</a>
                 </li>
-                <li> <a href="#">Discounted Fares</a> </li>
+                <li> <a href="#">Staff</a> </li>
                 <li class="active"> <strong>Data</strong> </li>
             </ol>
 
-            <h3>Exporting Discounted Fare Table Data</h3>
+            <h3>Exporting Staff Table Data</h3>
             <br />
 
-            <?php if ($can_add): ?>
-                <!-- Add Task Button -->
-                <a href="<?= $base_url ?>add_discounted_fares" class="btn btn-primary">
-                    + Add Discounted Fare
-                </a>
-            <?php endif; ?>
+            <!-- Add Task Button -->
+            <a href="<?= $base_url ?>add_staff" class="btn btn-primary">
+                + Add Staff
+            </a>
 
             <br /><br />
 
@@ -93,17 +87,13 @@ $discounted_fares = $obj->getResult();
                 <thead>
                     <tr>
                         <th>S.no</th>
-                        <th>Fare</th>
-                        <th>Discount Name</th>
-                        <th>Type</th>
-                        <th>Value</th>
-                        <th>Discounted Fare</th>
-                        <th>Valid From</th>
-                        <th>Valid To</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Designation</th>
+                        <th>Phone</th>
+                        <th>CNIC/PASSPORT</th>
                         <th>Status</th>
-                        <?php if ($can_show_actions): ?>
-                            <th>Actions</th>
-                        <?php endif; ?>
+                        <th>Actions</th>
                     </tr>
                 </thead>
 
@@ -111,100 +101,36 @@ $discounted_fares = $obj->getResult();
                     <?php
                     $sno = 1;
 
-                    // $discounted_fares = [
-                    //     [
-                    //         'id' => 1,
-                    //         'fare_id' => 'PIA - KHI → JED',
-                    //         'discount_name' => 'Ramadan Offer',
-                    //         'discount_type' => 'percentage',
-                    //         'discount_value' => 10,
-                    //         'discounted_total' => 76500,
-                    //         'valid_from' => '2026-05-30',
-                    //         'valid_to' => '2026-05-30',
-                    //         'status' => 'active'
-                    //     ],
-                    //     [
-                    //         'id' => 2,
-                    //         'fare_id' => 'Saudia - LHE → MED',
-                    //         'discount_name' => 'Umrah Special',
-                    //         'discount_type' => 'fixed',
-                    //         'discount_value' => 5000,
-                    //         'discounted_total' => 87000,
-                    //         'valid_from' => '2026-05-30',
-                    //         'valid_to' => '2026-06-15',
-                    //         'status' => 'inactive'
-                    //     ],
-                    // ];
-                    
-                    foreach ($discounted_fares as $df) {
+                    foreach ($staff_details as $staff) {
                         ?>
                         <tr>
                             <td><?= $sno++; ?></td>
 
                             <!-- Display route properly -->
-                            <td><?= htmlspecialchars($df['route']); ?></td>
+                            <td><?php echo $staff['firstname'].' '.$staff['lastname'];; ?></td>
 
-                            <td><?= htmlspecialchars($df['discount_name']); ?></td>
-
-                            <td><?= ucfirst($df['discount_type']); ?></td>
-
-                            <td><?= $df['discount_value']; ?></td>
-
-                            <td><?= number_format($df['discounted_total']); ?></td>
-
-                            <td><?= date('d M Y', strtotime($df['valid_from'])); ?></td>
-
-                            <td><?= date('d M Y', strtotime($df['valid_to'])); ?></td>
-
+                            <td><?= $staff['email']; ?></td>
+                            <td><?= $staff['designation']; ?></td>
+                            <td><?= $staff['phone_1']; ?></td>
+                            <td><?= $staff['cnic_passport']; ?></td>
+                            <td><?= ($staff['is_active']) ? 'Active' : 'In Active'; ?></td>
                             <td>
-                                <span class="label <?= $df['status'] == 'active' ? 'label-success' : 'label-default' ?>">
-                                    <?= ucfirst($df['status']); ?>
-                                </span>
+                                <div style="display:flex;gap:10px">
+
+                                    <!-- EDIT -->
+                                    <a href="add_staff?id=<?= $staff['id']; ?>" class="btn btn-info btn-sm">
+                                        Edit
+                                    </a>
+
+                                    <!-- DELETE -->
+                                    <button data-id="<?= $staff['id']; ?>"
+                                        class="btn btn-danger btn-sm delete-discounted-fare">
+                                        Delete
+                                    </button>
+
+                                </div>
                             </td>
-
-                            <?php if ($can_show_actions): ?>
-                                <td>
-                                    <div style="display:flex;gap:10px">
-
-                                        <?php if (!empty($user['can_view'])): ?>
-                                            <!-- VIEW BUTTON -->
-                                            <button class="btn btn-warning btn-sm view-discounted-fare" data-id="<?= $df['id']; ?>"
-                                                data-fare_id="<?= $df['fare_id']; ?>"
-                                                data-route="<?= htmlspecialchars($df['route']); ?>"
-                                                data-discount_name="<?= htmlspecialchars($df['discount_name']); ?>"
-                                                data-discount_type="<?= $df['discount_type']; ?>"
-                                                data-discount_value="<?= $df['discount_value']; ?>"
-                                                data-discounted_total="<?= $df['discounted_total']; ?>"
-                                                data-promo_code="<?= htmlspecialchars($df['promo_code']); ?>"
-                                                data-valid_from="<?= date('d M Y', strtotime($df['valid_from'])); ?>"
-                                                data-valid_to="<?= date('d M Y', strtotime($df['valid_to'])); ?>"
-                                                data-status="<?= $df['status']; ?>" data-toggle="modal"
-                                                data-target="#viewDiscountedFareModal">
-
-                                                View
-                                            </button>
-                                        <?php endif; ?>
-
-
-                                        <?php if (!empty($user['can_update'])): ?>
-                                            <!-- EDIT -->
-                                            <a href="add_discounted_fares?id=<?= $df['id']; ?>" class="btn btn-info btn-sm">
-                                                Edit
-                                            </a>
-                                        <?php endif; ?>
-
-                                        <?php if (!empty($user['can_delete'])): ?>
-                                            <!-- DELETE -->
-                                            <button data-id="<?= $df['id']; ?>"
-                                                class="btn btn-danger btn-sm delete-discounted-fare">
-                                                Delete
-                                            </button>
-                                        <?php endif; ?>
-
-
-                                    </div>
-                                </td>
-                            <?php endif; ?>
+                            
                         </tr>
                     <?php } ?>
                 </tbody>
@@ -331,67 +257,7 @@ $discounted_fares = $obj->getResult();
         </script>
         <?php unset($_SESSION['toast']);
     } ?>
-
-    <script>
-
-        $(document).ready(function () {
-
-            $(document).on('click', '.delete-discounted-fare', function () {
-
-                let id = $(this).data('id');
-                let row = $(this).closest('tr');
-
-                if (confirm("Are you sure you want to delete this discounted fare?")) {
-
-                    $.ajax({
-                        url: 'ajax/delete',
-                        type: 'POST',
-                        data: {
-                            id: id,
-                            table: 'discounted_fares'
-                        },
-                        success: function (response) {
-
-                            if (response.trim() == 'success') {
-
-                                row.fadeOut(400, function () {
-                                    $(this).remove();
-                                });
-
-                                toastr.success("Discounted Fare deleted successfully!");
-
-                            } else {
-                                toastr.error("Delete failed!");
-                            }
-                        }
-                    });
-
-                }
-
-            });
-
-        });
-
-    </script>
-
-    <script>
-        $(document).on('click', '.view-discounted-fare', function () {
-
-            $('#v_fare_name').val($(this).data('route'));
-            $('#v_discount_name').val($(this).data('discount_name'));
-            $('#v_discount_type').val($(this).data('discount_type'));
-            $('#v_discount_value').val($(this).data('discount_value'));
-
-            $('#v_discounted_total').val($(this).data('discounted_total'));
-            $('#v_promo_code').val($(this).data('promo_code'));
-
-            $('#v_valid_from').val($(this).data('valid_from'));
-            $('#v_valid_to').val($(this).data('valid_to'));
-
-            $('#v_status').val($(this).data('status'));
-
-        });
-    </script>
+    
 </body>
 
 </html>

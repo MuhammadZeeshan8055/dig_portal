@@ -49,8 +49,7 @@ $group_bookings = $obj->getResult();
             <hr />
 
             <ol class="breadcrumb bc-3">
-                <li> <a href=#><i
-                            class="fa-home"></i>Dashboard</a>
+                <li> <a href=#><i class="fa-home"></i>Dashboard</a>
                 </li>
                 <li> <a href="#">Discounted Fares</a> </li>
                 <li class="active"> <strong>Data</strong> </li>
@@ -59,10 +58,13 @@ $group_bookings = $obj->getResult();
             <h3>Exporting Group Bookings Table Data</h3>
             <br />
 
-            <!-- Add Task Button -->
-            <a href="<?= $base_url ?>add_discounted_fares" class="btn btn-primary">
-                + Add Group Bookings
-            </a>
+            <?php if (!empty($user['can_add'])): ?>
+                <!-- Add Task Button -->
+                <a href="<?= $base_url ?>add_discounted_fares" class="btn btn-primary">
+                    + Add Group Bookings
+                </a>
+            <?php endif; ?>
+
 
             <br /><br />
 
@@ -92,7 +94,9 @@ $group_bookings = $obj->getResult();
                         <th>Travel Date</th>
                         <th>Total Amount</th>
                         <th>Status</th>
-                        <th>Actions</th>
+                        <?php if ($can_show_actions): ?>
+                            <th>Actions</th>
+                        <?php endif; ?>
                     </tr>
                 </thead>
 
@@ -141,29 +145,41 @@ $group_bookings = $obj->getResult();
                                     <?= $gb['booking_status']; ?>
                                 </span>
                             </td>
-                            <td>
-                                <div style="display:flex;gap:10px">
-                                    <button class="btn btn-warning btn-sm view-group" data-id="<?= $gb['id']; ?>"
-                                        data-group_name="<?= htmlspecialchars($gb['group_name']); ?>"
-                                        data-group_type="<?= $gb['group_type']; ?>"
-                                        data-total_passengers="<?= $gb['total_passengers']; ?>"
-                                        data-departure_city="<?= htmlspecialchars($gb['departure_city']); ?>"
-                                        data-travel_date="<?= date('d M Y', strtotime($gb['travel_date'])); ?>"
-                                        data-package_type="<?= htmlspecialchars($gb['package_type']); ?>"
-                                        data-total_amount="<?= $gb['total_amount']; ?>"
-                                        data-deposit_amount="<?= $gb['deposit_amount']; ?>"
-                                        data-payment_deadline="<?= $gb['payment_deadline']; ?>"
-                                        data-assigned_agent="<?= htmlspecialchars($gb['assigned_agent']); ?>"
-                                        data-booking_status="<?= $gb['booking_status']; ?>" data-toggle="modal"
-                                        data-target="#viewGroupModal">
+                            <?php if ($can_show_actions): ?>
+                                <td>
+                                    <?php if (!empty($user['can_view'])): ?>
+                                        <div style="display:flex;gap:10px">
+                                            <button class="btn btn-warning btn-sm view-group" data-id="<?= $gb['id']; ?>"
+                                                data-group_name="<?= htmlspecialchars($gb['group_name']); ?>"
+                                                data-group_type="<?= $gb['group_type']; ?>"
+                                                data-total_passengers="<?= $gb['total_passengers']; ?>"
+                                                data-departure_city="<?= htmlspecialchars($gb['departure_city']); ?>"
+                                                data-travel_date="<?= date('d M Y', strtotime($gb['travel_date'])); ?>"
+                                                data-package_type="<?= htmlspecialchars($gb['package_type']); ?>"
+                                                data-total_amount="<?= $gb['total_amount']; ?>"
+                                                data-deposit_amount="<?= $gb['deposit_amount']; ?>"
+                                                data-payment_deadline="<?= $gb['payment_deadline']; ?>"
+                                                data-assigned_agent="<?= htmlspecialchars($gb['assigned_agent']); ?>"
+                                                data-booking_status="<?= $gb['booking_status']; ?>" data-toggle="modal"
+                                                data-target="#viewGroupModal">
 
-                                        View
-                                    </button>
-                                    <a href="add_group_bookings?id=<?= $gb['id']; ?>" class="btn btn-info btn-sm">Edit</a>
-                                    <button data-id="<?= $gb['id']; ?>"
-                                        class="btn btn-danger btn-sm delete-group-bookings">Delete</button>
-                                </div>
-                            </td>
+                                                View
+                                            </button>
+                                        <?php endif; ?>
+
+                                        <?php if (!empty($user['can_update'])): ?>
+                                            <a href="add_group_bookings?id=<?= $gb['id']; ?>" class="btn btn-info btn-sm">Edit</a>
+                                        <?php endif; ?>
+
+                                        <?php if (!empty($user['can_delete'])): ?>
+                                            <button data-id="<?= $gb['id']; ?>"
+                                                class="btn btn-danger btn-sm delete-group-bookings">Delete</button>
+                                        <?php endif; ?>
+
+                                    </div>
+                                </td>
+                            <?php endif; ?>
+
                         </tr>
                     <?php } ?>
                 </tbody>

@@ -117,10 +117,13 @@ if (isset($_POST['add_task'])) {
             <h3>Exporting Table Data</h3>
             <br />
 
+            <?php if (!empty($user['can_add'])): ?>
             <!-- Add Task Button -->
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addTaskModal">
                 + Add Task
             </button>
+            <?php endif; ?>
+
 
             <br /><br />
 
@@ -148,7 +151,9 @@ if (isset($_POST['add_task'])) {
                         <th>Priority</th>
                         <th>Due Date</th>
                         <th>Status</th>
-                        <th>Actions</th>
+                        <?php if ($can_show_actions): ?>
+                            <th>Actions</th>
+                        <?php endif; ?>
                     </tr>
                 </thead>
                 <tbody>
@@ -187,7 +192,9 @@ if (isset($_POST['add_task'])) {
                                     </span>
                                 <?php endif; ?>
                             </td>
+                            <?php if ($can_show_actions): ?>
                             <td>
+                            <?php if ($can_show_actions): ?>
                                 <div style="display:flex;gap:10px">
                                     <a href="javascript:void(0)" class="btn btn-info btn-sm edit-task"
                                         data-id="<?= $task['id']; ?>" data-title="<?= htmlspecialchars($task['title']); ?>"
@@ -196,9 +203,15 @@ if (isset($_POST['add_task'])) {
                                         data-toggle="modal" data-target="#addTaskModal">
                                         <span class="entypo-pencil"></span> Edit
                                     </a>
+                                    <?php endif; ?>
+
+                                    <?php if (!empty($user['can_delete'])): ?>
                                     <button class="btn btn-danger btn-sm delete-task" data-id="<?= $task['id']; ?>">
                                         <span class="entypo-trash"></span> Delete
                                     </button>
+                                    <?php endif; ?>
+
+                                    <?php if (!empty($user['can_update'])): ?>
 
                                     <?php
                                     $buttonText = ($task['status'] == 'completed') ? 'Mark As Incomplete' : 'Mark As Completed';
@@ -208,8 +221,11 @@ if (isset($_POST['add_task'])) {
                                     <a href="#" class="<?= $buttonClass ?>" data-id="<?= $task['id']; ?>">
                                         <?= $buttonText; ?>
                                     </a>
+                                    <?php endif; ?>
+
                                 </div>
                             </td>
+                            <?php endif; ?>
                         </tr>
                     <?php } ?>
                 </tbody>

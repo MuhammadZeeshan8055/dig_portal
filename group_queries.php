@@ -51,8 +51,7 @@ $group_queries = $obj->getResult();
             <hr />
 
             <ol class="breadcrumb bc-3">
-                <li> <a href=#><i
-                            class="fa-home"></i>Dashboard</a>
+                <li> <a href=#><i class="fa-home"></i>Dashboard</a>
                 </li>
                 <li> <a href="#">Group Queries</a> </li>
                 <li class="active"> <strong>Data</strong> </li>
@@ -61,10 +60,13 @@ $group_queries = $obj->getResult();
             <h3>Exporting Group Queries Table Data</h3>
             <br />
 
-            <!-- Add Task Button -->
-            <a href="<?= $base_url ?>add_group_queries" class="btn btn-primary">
-                + Add Group Queries
-            </a>
+            <?php if (!empty($user['can_add'])): ?>
+                <!-- Add Task Button -->
+                <a href="<?= $base_url ?>add_group_queries" class="btn btn-primary">
+                    + Add Group Queries
+                </a>
+            <?php endif; ?>
+
 
             <br /><br />
 
@@ -95,7 +97,9 @@ $group_queries = $obj->getResult();
                         <th>Follow-up</th>
                         <th>Assigned To</th>
                         <th>Status</th>
-                        <th>Actions</th>
+                        <?php if ($can_show_actions): ?>
+                            <th>Actions</th>
+                        <?php endif; ?>
                     </tr>
                 </thead>
 
@@ -182,19 +186,26 @@ $group_queries = $obj->getResult();
                                 </span>
                             </td>
 
-                            <td>
-                                <div style="display:flex;gap:10px">
+                            <?php if ($can_show_actions): ?>
+                                <td>
+                                    <div style="display:flex;gap:10px">
 
-                                    <a href="add_group_queries.php?id=<?= $gq['id'] ?>" class="btn btn-info btn-sm">
-                                        Edit
-                                    </a>
+                                        <?php if (!empty($user['can_update'])): ?>
+                                            <a href="add_group_queries.php?id=<?= $gq['id'] ?>" class="btn btn-info btn-sm">
+                                                Edit
+                                            </a>
+                                        <?php endif; ?>
 
-                                    <button data-id="<?= $gq['id'] ?>" class="btn btn-danger btn-sm delete-group-query">
-                                        Delete
-                                    </button>
+                                        <?php if (!empty($user['can_delete'])): ?>
+                                            <button data-id="<?= $gq['id'] ?>" class="btn btn-danger btn-sm delete-group-query">
+                                                Delete
+                                            </button>
+                                        <?php endif; ?>
 
-                                </div>
-                            </td>
+                                    </div>
+                                </td>
+                            <?php endif; ?>
+
                         </tr>
                     <?php } ?>
                 </tbody>

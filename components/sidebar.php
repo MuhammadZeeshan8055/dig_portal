@@ -20,7 +20,7 @@
     <ul id="main-menu" class="main-menu">
 
         <!-- New Case Audit History -->
-        <?php if ($userrole == 'Super Admin'): ?>
+        <?php if ($userrole == 'super_admin'): ?>
 
             <!-- <li class="">
                 <a href="<?= $base_url ?>index">
@@ -135,6 +135,19 @@
                 <span class="title">Group Queries</span>
             </a>
         </li>
+
+        <?php if ($userrole == 'super_admin'): ?>
+
+            <li class="<?= in_array($current_url, ['staff_details', 'add_staff']) ? 'active' : '' ?>">
+                <a href="<?= $base_url ?>staff_details">
+                    <i class="entypo-users"></i>
+                    <span class="title">Staff</span>
+                </a>
+            </li>
+
+        <?php endif; ?>
+
+
 
     </ul>
 </div>

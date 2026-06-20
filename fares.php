@@ -49,8 +49,7 @@ $fares = $obj->getResult();
             <hr />
 
             <ol class="breadcrumb bc-3">
-                <li> <a href=#><i
-                            class="fa-home"></i>Dashboard</a>
+                <li> <a href=#><i class="fa-home"></i>Dashboard</a>
                 </li>
                 <li> <a href="#">Fares</a> </li>
                 <li class="active"> <strong>Data</strong> </li>
@@ -60,9 +59,12 @@ $fares = $obj->getResult();
             <br />
 
             <!-- Add Task Button -->
-            <a href="<?= $base_url ?>add_fare" class="btn btn-primary">
-                + Add Fare
-            </a>
+
+            <?php if($can_add): ?>
+                <a href="<?= $base_url ?>add_fare" class="btn btn-primary">
+                    + Add Fare
+                </a>
+            <?php endif; ?>
 
             <br /><br />
 
@@ -92,7 +94,9 @@ $fares = $obj->getResult();
                         <th>Validity From</th>
                         <th>Validity To</th>
                         <th>Status</th>
-                        <th>Actions</th>
+                        <?php if ($can_show_actions): ?>
+                            <th>Actions</th>
+                        <?php endif; ?>
                     </tr>
                 </thead>
 
@@ -169,42 +173,47 @@ $fares = $obj->getResult();
                                 : 'btn btn-success btn-sm toggle-fare-status';
                             ?>
 
-                            <td>
-                                <div style="display:flex;gap:10px">
+                            <?php if ($can_show_actions): ?>
+                                <td>
+                                    <div style="display:flex;gap:10px">
 
-                                    <button class="btn btn-warning btn-sm view-fare" data-id="<?= $fare['id']; ?>"
-                                        data-airline_name="<?= htmlspecialchars($fare['airline_name']); ?>"
-                                        data-route="<?= htmlspecialchars($fare['route']); ?>"
-                                        data-fare_type="<?= $fare['fare_type']; ?>"
-                                        data-booking_class="<?= htmlspecialchars($fare['booking_class'] ?? ''); ?>"
-                                        data-base_fare="<?= $fare['base_fare'] ?? 0; ?>"
-                                        data-taxes="<?= $fare['taxes'] ?? 0; ?>"
-                                        data-total_fare="<?= $fare['total_fare']; ?>"
-                                        data-validity_from="<?= date('d M Y', strtotime($fare['validity_from'])); ?>"
-                                        data-validity_to="<?= date('d M Y', strtotime($fare['validity_to'])); ?>"
-                                        data-status="<?= $fare['status']; ?>"
-                                        data-refund_policy="<?= $fare['refund_policy']; ?>" data-toggle="modal"
-                                        data-target="#viewFareModal">
+                                        <?php if (!empty($user['can_view'])): ?>
+                                            <button class="btn btn-warning btn-sm view-fare" data-id="<?= $fare['id']; ?>"
+                                                data-airline_name="<?= htmlspecialchars($fare['airline_name']); ?>"
+                                                data-route="<?= htmlspecialchars($fare['route']); ?>"
+                                                data-fare_type="<?= $fare['fare_type']; ?>"
+                                                data-booking_class="<?= htmlspecialchars($fare['booking_class'] ?? ''); ?>"
+                                                data-base_fare="<?= $fare['base_fare'] ?? 0; ?>"
+                                                data-taxes="<?= $fare['taxes'] ?? 0; ?>"
+                                                data-total_fare="<?= $fare['total_fare']; ?>"
+                                                data-validity_from="<?= date('d M Y', strtotime($fare['validity_from'])); ?>"
+                                                data-validity_to="<?= date('d M Y', strtotime($fare['validity_to'])); ?>"
+                                                data-status="<?= $fare['status']; ?>"
+                                                data-refund_policy="<?= $fare['refund_policy']; ?>" data-toggle="modal"
+                                                data-target="#viewFareModal">
+                                                View
+                                            </button>
+                                        <?php endif; ?>
 
-                                        View
-                                    </button>
+                                        <?php if (!empty($user['can_update'])): ?>
+                                            <a href="<?= $base_url ?>add_fare?id=<?= $fare['id']; ?>" class="btn btn-info btn-sm">
+                                                Edit
+                                            </a>
 
+                                            <a href="#" class="<?= $buttonClass; ?>" data-id="<?= $fare['id']; ?>">
+                                                <?= $buttonText; ?>
+                                            </a>
+                                        <?php endif; ?>
 
-                                    <a href="<?= $base_url ?>add_fare?id=<?= $fare['id']; ?>"
-                                        class="btn btn-info btn-sm edit-fare">
-                                        Edit
-                                    </a>
+                                        <?php if (!empty($user['can_delete'])): ?>
+                                            <button class="btn btn-danger btn-sm delete-fare" data-id="<?= $fare['id']; ?>">
+                                                Delete
+                                            </button>
+                                        <?php endif; ?>
 
-                                    <button class="btn btn-danger btn-sm delete-fare" data-id="<?= $fare['id']; ?>">
-                                        Delete
-                                    </button>
-
-                                    <a href="#" class="<?= $buttonClass; ?>" data-id="<?= $fare['id']; ?>">
-                                        <?= $buttonText; ?>
-                                    </a>
-
-                                </div>
-                            </td>
+                                    </div>
+                                </td>
+                            <?php endif; ?>
                         </tr>
                     <?php } ?>
                 </tbody>
