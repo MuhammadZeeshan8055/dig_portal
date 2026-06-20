@@ -117,10 +117,10 @@ if (isset($_POST['add_group_booking'])) {
             <hr />
 
             <ol class="breadcrumb bc-3">
-                <li> <a href="https://themes.laborator.co/neon/demo/dashboard/main/"><i
+                <li> <a href=#><i
                             class="fa-home"></i>Dashboard</a>
                 </li>
-                <li> <a href="https://themes.laborator.co/neon/demo/layouts/layout-api/">Group Booking</a> </li>
+                <li> <a href="#">Group Booking</a> </li>
                 <li class="active"> <strong>Add Group Booking</strong> </li>
             </ol>
             <div class="row">

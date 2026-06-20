@@ -124,10 +124,10 @@ if (isset($_POST['add_fare'])) {
             <hr />
 
             <ol class="breadcrumb bc-3">
-                <li> <a href="https://themes.laborator.co/neon/demo/dashboard/main/"><i
+                <li> <a href=#><i
                             class="fa-home"></i>Dashboard</a>
                 </li>
-                <li> <a href="https://themes.laborator.co/neon/demo/layouts/layout-api/">Fares</a> </li>
+                <li> <a href="#">Fares</a> </li>
                 <li class="active"> <strong>Add Fare</strong> </li>
             </ol>
 
