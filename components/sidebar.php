@@ -2,7 +2,7 @@
     <header class="logo-env">
         <div class="logo">
             <a href="index">
-                <img src="dig.png" width="50px" height="50px" alt />
+                <img src="<?= $base_url ?>dig.png" width="50px" height="50px" alt />
             </a>
         </div>
         <div class="sidebar-collapse">
@@ -31,19 +31,19 @@
         <?php endif; ?>
 
         <!-- Attendance Menu -->
-        <!-- <li class="has-sub root-level">
-            <a href="attendance_dashboard">
+        <li class="has-sub root-level">
+            <a href="#">
                 <i class="entypo-window"></i>
                 <span class="title">Attendance</span>
             </a>
             <ul class="">
                 <li class="">
-                    <a href="attendance_dashboard">
+                    <a href="<?= $base_url ?>attendance/attendance_dashboard">
                         <span class="title">Mark Attendance</span>
                     </a>
                 </li>
 
-                <li class="">
+                <!-- <li class="">
                     <a href="attendance_report">
                         <span class="title">Attendance Report</span>
                     </a>
@@ -84,9 +84,9 @@
                     <a href="settings">
                         <span class="title">Settings</span>
                     </a>
-                </li>
+                </li> -->
             </ul>
-        </li> -->
+        </li>
 
         <!-- Dashboard -->
         <li class="<?= ($current_url == 'index') ? 'active' : '' ?>">
@@ -98,7 +98,7 @@
 
         <!-- Daily Queries -->
         <li class="<?= ($current_url == 'working_queries') ? 'active' : '' ?>">
-            <a href="working_queries">
+            <a href="<?= $base_url ?>working_queries">
                 <i class="entypo-chat"></i>
                 <span class="title">Daily Queries</span>
             </a>

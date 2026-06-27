@@ -11,6 +11,9 @@ if (!isset($_SESSION['staff_id'])) {
     exit;
 }
 
+$total_working_hours = 8 ?? null;
+
+
 $staff_id = $_SESSION['staff_id'];
 $userrole = $_SESSION['role'];
 $staff_name = $_SESSION['firstname'] . ' ' . $_SESSION['lastname'];
@@ -64,4 +67,13 @@ function formatDate($date)
 
     return date("d-m-Y", strtotime($date));
 }
+
+function currentDate(){
+    return date('Y-m-d');
+}
+function currentTime() {
+    date_default_timezone_set('Asia/Karachi'); // Set timezone to Pakistan
+    return date('h:i A');
+}
+
 ?>

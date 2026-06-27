@@ -3,6 +3,12 @@
 session_start();
 include('database.php');
 
+if ($_SERVER['HTTP_HOST'] == 'localhost') {
+   $base_url = "http://localhost/dig_portal/";
+} else {
+   $base_url = "https://dhotharinternational.com/dig_portal/";
+}
+
 $errormsg = "";
 
 $obj = new Database();
@@ -33,7 +39,7 @@ if (isset($_POST['login'])) {
            $_SESSION['lastname'] = $user['lastname'];
            $_SESSION['role'] = $user['role'];
 
-           header("Location: index.php");
+           header("Location: attendance/attendance_dashboard");
            exit;
 
        } else {
@@ -63,20 +69,20 @@ if (isset($_POST['login'])) {
    <meta name="viewport" content="width=device-width, initial-scale=1" />
    <meta name="description" content="Dhothar International" />
    <meta name="author" content="Laborator.co" />
-   <link rel="icon" href="assets/images/favicon.ico">
+   <link rel="icon" href="<?= $base_url ?>assets/images/favicon.ico">
 
 
    <title>Dhothar International | Login</title>
-   <link rel="stylesheet" href="assets/js/jquery-ui/css/no-theme/jquery-ui-1.10.3.custom.min.css" id="style-resource-1">
-   <link rel="stylesheet" href="assets/css/font-icons/entypo/css/entypo.css" id="style-resource-2">
+   <link rel="stylesheet" href="<?= $base_url ?>assets/js/jquery-ui/css/no-theme/jquery-ui-1.10.3.custom.min.css" id="style-resource-1">
+   <link rel="stylesheet" href="<?= $base_url ?>assets/css/font-icons/entypo/css/entypo.css" id="style-resource-2">
    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic"
       id="style-resource-3">
-   <link rel="stylesheet" href="assets/css/bootstrap.css" id="style-resource-4">
-   <link rel="stylesheet" href="assets/css/neon-core.css" id="style-resource-5">
-   <link rel="stylesheet" href="assets/css/neon-theme.css" id="style-resource-6">
-   <link rel="stylesheet" href="assets/css/neon-forms.css" id="style-resource-7">
-   <link rel="stylesheet" href="assets/css/custom.css" id="style-resource-8">
-   <script src="assets/js/jquery-1.11.3.min.js"></script>
+   <link rel="stylesheet" href="<?= $base_url ?>assets/css/bootstrap.css" id="style-resource-4">
+   <link rel="stylesheet" href="<?= $base_url ?>assets/css/neon-core.css" id="style-resource-5">
+   <link rel="stylesheet" href="<?= $base_url ?>assets/css/neon-theme.css" id="style-resource-6">
+   <link rel="stylesheet" href="<?= $base_url ?>assets/css/neon-forms.css" id="style-resource-7">
+   <link rel="stylesheet" href="<?= $base_url ?>assets/css/custom.css" id="style-resource-8">
+   <script src="<?= $base_url ?>assets/js/jquery-1.11.3.min.js"></script>
 </head>
 
 <body class="page-body login-page login-form-fall" data-url="https://demo.neontheme.com">
@@ -123,18 +129,18 @@ if (isset($_POST['login'])) {
          </div>
       </div>
    </div>
-   <script src="assets/js/gsap/TweenMax.min.js" id="script-resource-1"></script>
-   <script src="assets/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js" id="script-resource-2"></script>
-   <script src="assets/js/bootstrap.js" id="script-resource-3"></script>
-   <script src="assets/js/joinable.js" id="script-resource-4"></script>
-   <script src="assets/js/resizeable.js" id="script-resource-5"></script>
-   <script src="assets/js/neon-api.js" id="script-resource-6"></script>
-   <script src="assets/js/cookies.min.js" id="script-resource-7"></script>
-   <script src="assets/js/jquery.validate.min.js" id="script-resource-8"></script>
-   <script src="assets/js/neon-login.js" id="script-resource-9"></script>
-   <script src="assets/js/neon-custom.js" id="script-resource-10"></script>
-   <script src="assets/js/neon-demo.js" id="script-resource-11"></script>
-   <script src="assets/js/neon-skins.js" id="script-resource-12"></script>
+   <script src="<?= $base_url ?>assets/js/gsap/TweenMax.min.js" id="script-resource-1"></script>
+   <script src="<?= $base_url ?>assets/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js" id="script-resource-2"></script>
+   <script src="<?= $base_url ?>assets/js/bootstrap.js" id="script-resource-3"></script>
+   <script src="<?= $base_url ?>assets/js/joinable.js" id="script-resource-4"></script>
+   <script src="<?= $base_url ?>assets/js/resizeable.js" id="script-resource-5"></script>
+   <script src="<?= $base_url ?>assets/js/neon-api.js" id="script-resource-6"></script>
+   <script src="<?= $base_url ?>assets/js/cookies.min.js" id="script-resource-7"></script>
+   <script src="<?= $base_url ?>assets/js/jquery.validate.min.js" id="script-resource-8"></script>
+   <script src="<?= $base_url ?>assets/js/neon-login.js" id="script-resource-9"></script>
+   <script src="<?= $base_url ?>assets/js/neon-custom.js" id="script-resource-10"></script>
+   <script src="<?= $base_url ?>assets/js/neon-demo.js" id="script-resource-11"></script>
+   <script src="<?= $base_url ?>assets/js/neon-skins.js" id="script-resource-12"></script>
 
 </body>
 
