@@ -896,7 +896,7 @@ if (!empty($result)) {
                             $(".show-shift-details").show();
                             $("#show-end-shift-message").show();
                             // Redirect to the dashboard
-                            window.location.href = "http://localhost/dig_portal/attendance/attendance_dashboard";
+                            window.location.href = "<?= $base_url ?>/attendance/attendance_dashboard";
                         }, 1000);
 
                         loadTable(selectedMonth);
